@@ -1,3 +1,4 @@
+// controllers/packageController.js
 import Package from '../models/Package.js';
 import User from '../models/User.js';
 
@@ -52,32 +53,33 @@ export const createPackage = async (req, res) => {
       month,
       year,
       monthlyInstallment,
-      packageId
+      packageId,
+      prizeDescription // NEW
     } = req.body;
 
-    const packages = await Package.create({
+    const pkg = await Package.create({
       name,
       destination,
-      couples,
+      couples: Number(couples),
       duration,
       images,
       description,
       inclusions,
       drawDate,
       month,
-      year,
-      monthlyInstallment,
-      packageId
+      year: Number(year),
+      monthlyInstallment: Number(monthlyInstallment),
+      packageId,
+      prizeDescription: prizeDescription || ''
     });
 
     res.status(201).json({
       success: true,
       message: 'Package created successfully',
-      data: packages
+      data: pkg
     });
   } catch (error) {
     console.log(error);
-    
     res.status(500).json({
       success: false,
       message: 'Server Error',
@@ -92,13 +94,23 @@ export const updatePackage = async (req, res) => {
     const { id } = req.params;
     const updateData = req.body;
 
-    const packages = await Package.findByIdAndUpdate(
+    if (updateData.couples != null) {
+      updateData.couples = Number(updateData.couples);
+    }
+    if (updateData.monthlyInstallment != null) {
+      updateData.monthlyInstallment = Number(updateData.monthlyInstallment);
+    }
+    if (updateData.year != null) {
+      updateData.year = Number(updateData.year);
+    }
+
+    const pkg = await Package.findByIdAndUpdate(
       id,
       updateData,
       { new: true, runValidators: true }
     );
 
-    if (!packages) {
+    if (!pkg) {
       return res.status(404).json({
         success: false,
         message: 'Package not found'
@@ -108,11 +120,10 @@ export const updatePackage = async (req, res) => {
     res.status(200).json({
       success: true,
       message: 'Package updated successfully',
-      data: packages
+      data: pkg
     });
   } catch (error) {
     console.log(error);
-    
     res.status(500).json({
       success: false,
       message: 'Server Error',
@@ -126,9 +137,9 @@ export const deletePackage = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const packages = await Package.findByIdAndDelete(id);
+    const pkg = await Package.findByIdAndDelete(id);
 
-    if (!packages) {
+    if (!pkg) {
       return res.status(404).json({
         success: false,
         message: 'Package not found'
@@ -148,10 +159,10 @@ export const deletePackage = async (req, res) => {
   }
 };
 
-// Update current package (for admin)
+// Update current package (live link + winner info + optional chosenPrize text)
 export const updateCurrentPackage = async (req, res) => {
   try {
-    const { liveVideoUrl, winnerId, feedbackMessage, feedbackVideo } = req.body;
+    const { liveVideoUrl, winnerId, feedbackMessage, feedbackVideo, chosenPrize } = req.body;
 
     const currentPackage = await Package.findOne({ status: 'current' });
 
@@ -184,6 +195,7 @@ export const updateCurrentPackage = async (req, res) => {
         phone: winner.phone,
         feedbackMessage: feedbackMessage || '',
         feedbackVideo: feedbackVideo || '',
+        chosenPrize: chosenPrize || '',
         userId: winnerId
       };
       updateData.status = 'draw_completed';
@@ -209,14 +221,14 @@ export const updateCurrentPackage = async (req, res) => {
   }
 };
 
-// Get package details
+// Get single package
 export const getPackageDetails = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const packages = await Package.findById(id);
+    const pkg = await Package.findById(id);
 
-    if (!packages) {
+    if (!pkg) {
       return res.status(404).json({
         success: false,
         message: 'Package not found'
@@ -225,7 +237,7 @@ export const getPackageDetails = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      data: packages
+      data: pkg
     });
   } catch (error) {
     res.status(500).json({
