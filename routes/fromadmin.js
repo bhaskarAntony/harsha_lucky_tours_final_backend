@@ -27,7 +27,7 @@ router.post('/', async (req, res) => {
     }
       const year = new Date().getFullYear();
     const randomNum = Math.floor(Math.random() * 999999).toString().padStart(6, '0');
-    userData.virtualCardNumber = `HLT-${year}-${randomNum}`;
+    // userData.virtualCardNumber = `HLT-${year}-${randomNum}`;
     
     const user = new User(userData);
     await user.save();
@@ -64,6 +64,7 @@ router.post('/import', upload.single('file'), async (req, res) => {
           name: row.name || row.Name,
           email: row.email || row.Email,
           phone: row.phone || row.Phone,
+          virtualCardNumber: row.virtualCardNumber || row.virtualcardnumber,
           city: row.city || row.City,
           address: row.address || row.Address,
           branch: row.branch || row.Branch,
@@ -71,9 +72,9 @@ router.post('/import', upload.single('file'), async (req, res) => {
           password: `${(row.email || row.Email).split('@')[0]}@123`
         };
 
-          const year = new Date().getFullYear();
-    const randomNum = Math.floor(Math.random() * 999999).toString().padStart(6, '0');
-    userData.virtualCardNumber = `HLT-${year}-${randomNum}`;
+    //       const year = new Date().getFullYear();
+    // const randomNum = Math.floor(Math.random() * 999999).toString().padStart(6, '0');
+    // userData.virtualCardNumber = `HLT-${year}-${randomNum}`;
         const user = new User(userData);
         await user.save();
         users.push(user);
