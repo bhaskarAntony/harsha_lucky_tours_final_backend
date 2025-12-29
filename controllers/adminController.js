@@ -107,7 +107,7 @@ export const getAllUsers = async (req, res) => {
 
 export const createUser = async (req, res) => {
   try {
-    const { name, email, phone, password, city, address, dateOfBirth } = req.body;
+    const { name, email, phone, password, city, address, dateOfBirth, virtualCardNumber } = req.body;
 
     const existingUser = await User.findOne({
       $or: [{ email }, { phone }]
@@ -120,9 +120,9 @@ export const createUser = async (req, res) => {
       });
     }
 
-     const year = new Date().getFullYear();
-    const randomNum = Math.floor(Math.random() * 999999).toString().padStart(6, '0');
-    const virtualCardNumber = `HLT-${year}-${randomNum}`;
+    //  const year = new Date().getFullYear();
+    // const randomNum = Math.floor(Math.random() * 999999).toString().padStart(6, '0');
+    // const virtualCardNumber = `HLT-${year}-${randomNum}`;
 
     const user = await User.create({
       name,
