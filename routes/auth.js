@@ -21,7 +21,7 @@
   ];
 
   const loginValidation = [
-    body('phone').isEmail().withMessage('Please provide a valid email'),
+    body('phone').isMobilePhone().withMessage('Please provide a valid email'),
     body('password').notEmpty().withMessage('Password is required')
   ];
 
