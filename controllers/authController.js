@@ -90,10 +90,10 @@ export const login = async (req, res) => {
       });
     }
 
-    const { email, password } = req.body;
+    const { phone, password } = req.body;
 
     // Check if user exists
-    const user = await User.findOne({ email }).select('+password');
+    const user = await User.findOne({ phone }).select('+password');
 
     if (!user || !(await user.comparePassword(password))) {
       return res.status(401).json({
