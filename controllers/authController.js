@@ -81,14 +81,14 @@ export const register = async (req, res) => {
 // Login User
 export const login = async (req, res) => {
   try {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({
-        success: false,
-        message: 'Validation Error',
-        errors: errors.array()
-      });
-    }
+    // const errors = validationResult(req);
+    // if (!errors.isEmpty()) {
+    //   return res.status(400).json({
+    //     success: false,
+    //     message: 'Validation Error',
+    //     errors: errors.array()
+    //   });
+    // }
 
     const { phone, password } = req.body;
 
