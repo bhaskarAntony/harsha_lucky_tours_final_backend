@@ -14,7 +14,7 @@
   // Validation rules
   const registerValidation = [
     body('name').notEmpty().withMessage('Name is required'),
-    body('email').isEmail().withMessage('Please provide a valid email'),
+    // body('email').isEmail().withMessage('Please provide a valid email'),
     body('phone').isMobilePhone().withMessage('Please provide a valid phone number'),
     body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters'),
     body('city').notEmpty().withMessage('City is required')
