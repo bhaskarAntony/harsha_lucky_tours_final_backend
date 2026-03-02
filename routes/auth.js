@@ -21,13 +21,13 @@
   ];
 
   const loginValidation = [
-    body('phone').isMobilePhone().withMessage('Please provide a valid email'),
+    body('phone').isMobilePhone().withMessage('Please provide a valid phone'),
     body('password').notEmpty().withMessage('Password is required')
   ];
 
   // Routes
   router.post('/register', registerValidation, register);
-  router.post('/login', loginValidation, login);
+  router.post('/login', login);
   router.get('/me', protect, getMe);
   router.put('/profile', protect, updateProfile);
   router.put('/change-password', protect, changePassword);
