@@ -73,7 +73,6 @@ export const getAllUsers = async (req, res) => {
     if (search) {
       query.$or = [
         { name: { $regex: search, $options: 'i' } },
-        { email: { $regex: search, $options: 'i' } },
         { phone: { $regex: search, $options: 'i' } },
         { virtualCardNumber: { $regex: search, $options: 'i' } }
       ];
@@ -107,16 +106,16 @@ export const getAllUsers = async (req, res) => {
 
 export const createUser = async (req, res) => {
   try {
-    const { name, email, phone, password, city, address, dateOfBirth, virtualCardNumber } = req.body;
+    const { name, phone, password, city, address, dateOfBirth, virtualCardNumber } = req.body;
 
     const existingUser = await User.findOne({
-      $or: [{ email }, { phone }]
+      $or: [{ virtualCardNumber }, { phone }]
     });
 
     if (existingUser) {
       return res.status(400).json({
         success: false,
-        message: 'User already exists with this email or phone'
+        message: 'User already exists with this virtualCardNumber or phone'
       });
     }
 
@@ -126,7 +125,6 @@ export const createUser = async (req, res) => {
 
     const user = await User.create({
       name,
-      email,
       phone,
       password,
       city,
@@ -141,7 +139,6 @@ export const createUser = async (req, res) => {
       user: {
         id: user._id,
         name: user.name,
-        email: user.email,
         phone: user.phone,
         virtualCardNumber: user.virtualCardNumber,
         city: user.city
@@ -159,11 +156,11 @@ export const createUser = async (req, res) => {
 export const updateUser = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, email, phone, city, address, dateOfBirth, isActive } = req.body;
+    const { name, phone, city, address, dateOfBirth, isActive } = req.body;
 
     const user = await User.findByIdAndUpdate(
       id,
-      { name, email, phone, city, address, dateOfBirth, isActive },
+      { name, phone, city, address, dateOfBirth, isActive },
       { new: true, runValidators: true }
     ).select('-password');
 
