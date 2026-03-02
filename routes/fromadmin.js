@@ -23,7 +23,7 @@ router.post('/', async (req, res) => {
     
     // Generate password if not provided
     if (!userData.password) {
-      userData.password = `${userData.email.split('@')[0]}@123`;
+      userData.password = `${userData.name.split(' ')[0]}@123`;
     }
       const year = new Date().getFullYear();
     const randomNum = Math.floor(Math.random() * 999999).toString().padStart(6, '0');
